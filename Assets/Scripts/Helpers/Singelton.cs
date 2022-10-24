@@ -23,7 +23,7 @@ public abstract class Singelton<T> : MonoBehaviour where T : Component
         }
     }
 
-    void Awake()
+    protected virtual void Awake()
     {
         if (!instance)
         {

@@ -15,7 +15,6 @@ public class PlayerController : MonoBehaviour
 
     Vector3 curMoveInput;
 
-
     void Start()
     {
         try
@@ -66,7 +65,11 @@ public class PlayerController : MonoBehaviour
 
     public void Look(InputAction.CallbackContext context)
     {
-        
+        /*Transform cameraTransform = Camera.main.transform;
+        Quaternion cameraRotation = cameraTransform.rotation;
+        cameraRotation.eulerAngles = new Vector3(0, cameraRotation.y, 0);
+
+        transform.rotation = Quaternion.LookRotation(, Camera.main.transform.up);*/
     }
 
     public void Fire(InputAction.CallbackContext context)
@@ -80,7 +83,7 @@ public class PlayerController : MonoBehaviour
 
             if (context.action.WasReleasedThisFrame())
             {
-                throw new UnassignedReferenceException("Fire Pressed");
+                throw new UnassignedReferenceException("Fire Released");
             }
         }
         
