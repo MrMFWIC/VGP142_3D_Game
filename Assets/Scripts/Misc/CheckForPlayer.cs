@@ -24,8 +24,10 @@ public class CheckForPlayer : MonoBehaviour
         else
             transform.LookAt(playerTransform.position);
 
+        var ray = new Ray(originPoint.position, this.transform.forward);
+
         RaycastHit hit;
-        if (Physics.Raycast(originPoint.position, Vector3.forward, out hit, sightDistance))
+        if (Physics.Raycast(ray, out hit, sightDistance))
         {
             if (hit.transform.gameObject.tag == "Player")
                 playerTransform = hit.transform;
