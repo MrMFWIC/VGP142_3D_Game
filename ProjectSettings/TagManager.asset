@@ -6,6 +6,11 @@ TagManager:
   tags:
   - Enemy
   - Projectile
+  - PatrolNode
+  - GodMode
+  - AttachPoint
+  - Weapon
+  - GunSpawn
   layers:
   - Default
   - TransparentFX

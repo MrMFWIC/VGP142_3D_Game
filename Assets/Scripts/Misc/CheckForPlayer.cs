@@ -10,10 +10,10 @@ public class CheckForPlayer : MonoBehaviour
     public Transform originPoint;
 
     public float rotationSpeed;
-
+    // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -24,10 +24,8 @@ public class CheckForPlayer : MonoBehaviour
         else
             transform.LookAt(playerTransform.position);
 
-        var ray = new Ray(originPoint.position, this.transform.forward);
-
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, sightDistance))
+        if (Physics.Raycast(originPoint.position, Vector3.forward, out hit, sightDistance))
         {
             if (hit.transform.gameObject.tag == "Player")
                 playerTransform = hit.transform;

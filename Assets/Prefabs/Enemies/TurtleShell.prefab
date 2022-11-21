@@ -704,6 +704,7 @@ GameObject:
   - component: {fileID: 5048137151828598864}
   - component: {fileID: -4119828812148673262}
   - component: {fileID: -3827311171803418150}
+  - component: {fileID: 58925042866463762}
   m_Layer: 0
   m_Name: TurtleShell
   m_TagString: Enemy
@@ -760,6 +761,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0d4d05146c4cfa46828e842c61f95ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  currentState: 0
+  path: []
+  pathIndex: 0
+  distThreshold: 0
   currentEnemyType: 3
   rotationSpeed: 3
   moveSpeed: 3
@@ -779,6 +785,28 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!195 &58925042866463762
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5141826992702235700}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1.15
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &5141847377723205598
 GameObject:
   m_ObjectHideFlags: 0

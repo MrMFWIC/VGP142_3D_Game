@@ -8,17 +8,21 @@ public class PlayerController : MonoBehaviour
 {
     GameManager gameManager;
     Animator anim;
-
+    WeaponPickup wp;
+    CharacterController controller;
+    
     public Camera playerCamera;
     public float moveSpeed = 10;
     public float gravity = 9.81f;
     public float jumpSpeed = 10.0f;
     public float projectileSpeed = 40f;
 
-    public Rigidbody projectile;
+    public Rigidbody projectilePrefab;
     public Transform projectileSpawnPoint;
-    
-    CharacterController controller;
+    public float projectileForce = 10.0f;
+
+    public bool godModeActive = false;
+    public float godModeTimer = 5.0f;
 
     Vector3 curMoveInput;
     Vector3 destination;
@@ -63,6 +67,12 @@ public class PlayerController : MonoBehaviour
 
         anim.SetFloat("Forward", move.x);
         anim.SetFloat("Right", move.x);
+
+        if (controller.transform.position.y <= 9.0f)
+        {
+            GameManager.instance.health--;
+            GameManager.instance.Respawn();
+        }
     }
 
     public void MovePlayer(InputAction.CallbackContext context)
@@ -81,30 +91,41 @@ public class PlayerController : MonoBehaviour
 
     public void Fire(InputAction.CallbackContext context)
     {
-        try
+        if (context.action.WasPressedThisFrame())
         {
-            if (context.action.WasPressedThisFrame())
+            if (projectilePrefab && wp.weaponFirePoint && GetComponent<WeaponPickup>().weapon != null)
             {
-                if (projectile && projectileSpawnPoint)
-                {
-                    Rigidbody temp = Instantiate(projectile, projectileSpawnPoint.position, projectileSpawnPoint.rotation);
-                    temp.AddForce(projectileSpawnPoint.forward * projectileSpeed, ForceMode.Impulse);
+                Rigidbody temp = Instantiate(projectilePrefab, wp.weaponFirePoint.transform.position, wp.weaponFirePoint.transform.rotation);
+                temp.AddForce(wp.weaponFirePoint.transform.forward * projectileForce, ForceMode.Impulse);
 
-                    Destroy(temp.gameObject, 2.0f);
-                }
-
-                throw new UnassignedReferenceException("Fire Pressed");
-            }
-
-            if (context.action.WasReleasedThisFrame())
-            {
-                throw new UnassignedReferenceException("Fire Released");
+                Destroy(temp.gameObject, 2.0f);
             }
         }
+    }
 
-        catch (UnassignedReferenceException e)
+    IEnumerator StopGodMode()
+    {
+        yield return new WaitForSeconds(godModeTimer);
+
+        godModeActive = false;
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.gameObject.CompareTag("GodMode"))
         {
-            Debug.Log(e.Message);
+            if (!godModeActive)
+            {
+                godModeActive = true;
+                StartCoroutine(StopGodMode());
+            }
+
+            Destroy(hit.gameObject);
+        }
+
+        if (hit.gameObject.CompareTag("Enemy"))
+        {
+            GameManager.instance.health--;
         }
     }
 }

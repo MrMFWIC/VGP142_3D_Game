@@ -11,40 +11,12 @@ public class HUDManager : MonoBehaviour
     [Header("HUDObject")]
     public GameObject HUD;
 
-    [Header("Text")]
-    public Text lifeText;
-    public Text scoreText;
-
     [Header("Bars")]
     public GameObject healthBar;
 
     void Start()
     {
-        if (lifeText)
-        {
-            //GameManager.instance.OnLifeValueChanged.AddListener((value) => UpdateLifeText(value));
-        }
-
-        if (scoreText)
-        {
-            //GameManager.instance.OnScoreValueChanged.AddListener((value) => UpdateScoreText(value));
-        }
-    }
-
-    void UpdateLifeText(int value)
-    {
-        if (lifeText)
-        {
-            lifeText.text = "LIVES: " + value.ToString();
-        }
-    }
-
-    void UpdateScoreText(int value)
-    {
-        if (scoreText)
-        {
-            scoreText.text = "Score: " + value.ToString();
-        }
+        GameManager.instance.OnLifeValueChanged.AddListener((value) => UpdateHealthBarSprite(value));
     }
 
     void Update()
@@ -57,5 +29,23 @@ public class HUDManager : MonoBehaviour
         {
             HUD.SetActive(false);
         }
+    }
+
+    public void UpdateHealthBarSprite(int value)
+    {
+        if (value == 4)
+            healthBar.GetComponent<SpriteRenderer>().sprite.name = "HealthBar4";
+
+        if (value == 3)
+            healthBar.GetComponent<SpriteRenderer>().sprite.name = "HealthBar3";
+        
+        if (value == 2)
+            healthBar.GetComponent<SpriteRenderer>().sprite.name = "HealthBar2";
+        
+        if (value == 1)
+            healthBar.GetComponent<SpriteRenderer>().sprite.name = "HealthBar1";
+        
+        if (value == 0)
+            healthBar.GetComponent<SpriteRenderer>().sprite.name = "HealthBar0";
     }
 }
