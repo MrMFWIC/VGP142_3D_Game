@@ -16,6 +16,7 @@ public class CanvasManager : MonoBehaviour
     public Button backButton;
     public Button resumeGame;
     public Button returnToMenu;
+    public Button continueButton;
 
     [Header("Menus")]
     public GameObject mainMenu;
@@ -31,6 +32,10 @@ public class CanvasManager : MonoBehaviour
     public Text masterVolSliderText;
     public Text musicVolSliderText;
     public Text SFXVolSliderText;
+    public Text drownedText;
+    public Text killedText;
+    public Text finalLifeText;
+    public Text continueCounterText;
 
     void Start()
     {
@@ -93,6 +98,11 @@ public class CanvasManager : MonoBehaviour
         if (returnToMenu)
         {
             returnToMenu.onClick.AddListener(() => LoadMenu());
+        }
+
+        if (continueButton)
+        {
+            continueButton.onClick.AddListener(() => ContinueGame());
         }
     }
 
@@ -197,5 +207,13 @@ public class CanvasManager : MonoBehaviour
     void LoadMenu()
     {
         SceneManager.LoadScene("MainMenu");
+    }
+
+    void ContinueGame()
+    {
+        SceneManager.LoadScene("Level");
+        GameManager.Instance.drowned = false;
+        GameManager.Instance.continueCounter--;
+        GameManager.Instance.maxHealth--;
     }
 }

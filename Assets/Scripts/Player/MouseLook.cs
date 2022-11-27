@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class MouseLook : MonoBehaviour
 {
@@ -39,27 +40,30 @@ public class MouseLook : MonoBehaviour
 
     public void Look(InputAction.CallbackContext context)
     {
-        Vector2 mouseDelta = context.action.ReadValue<Vector2>();
-
-        if (axes == RotationAxis.MouseXAndY)
+        if (SceneManager.GetActiveScene().name == "Level")
         {
-            float rotationX = transform.localEulerAngles.y + mouseDelta.x * sensitivityX;
+            Vector2 mouseDelta = context.action.ReadValue<Vector2>();
 
-            rotationY += mouseDelta.y * sensitivityY;
-            rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
+            if (axes == RotationAxis.MouseXAndY)
+            {
+                float rotationX = transform.localEulerAngles.y + mouseDelta.x * sensitivityX;
 
-            transform.localEulerAngles = new Vector3(-rotationY, rotationX, 0);
-        }
-        else if (axes == RotationAxis.MouseX)
-        {
-            transform.Rotate(0, mouseDelta.x * sensitivityX, 0);
-        }
-        else
-        {
-            rotationY += mouseDelta.y * sensitivityY;
-            rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
+                rotationY += mouseDelta.y * sensitivityY;
+                rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
 
-            transform.localEulerAngles = new Vector3(-rotationY, transform.localEulerAngles.y, 0);
+                transform.localEulerAngles = new Vector3(-rotationY, rotationX, 0);
+            }
+            else if (axes == RotationAxis.MouseX)
+            {
+                transform.Rotate(0, mouseDelta.x * sensitivityX, 0);
+            }
+            else
+            {
+                rotationY += mouseDelta.y * sensitivityY;
+                rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
+
+                transform.localEulerAngles = new Vector3(-rotationY, transform.localEulerAngles.y, 0);
+            }
         }
     }
 }

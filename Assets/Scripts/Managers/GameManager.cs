@@ -7,14 +7,6 @@ using UnityEngine.Events;
 
 public class GameManager : Singelton<GameManager>
 {
-    static GameManager _instance = null;
-
-    public static GameManager instance
-    {
-        get { return _instance; }
-        set { _instance = value; }
-    }
-
     [HideInInspector] public Player playerInput;
     [HideInInspector] public UnityEvent<int> OnLifeValueChanged;
 
@@ -23,6 +15,10 @@ public class GameManager : Singelton<GameManager>
 
     public PlayerController controller;
     public Transform spawnPoint;
+    public CanvasManager cv;
+
+    public bool drowned = false;
+    public int continueCounter = 3;
 
     private int _health = 4;
     public int maxHealth = 4;
@@ -44,7 +40,7 @@ public class GameManager : Singelton<GameManager>
 
             if (_health <= 0)
             {
-                GameOver();
+                Playerdeath();
             }
 
             OnLifeValueChanged.Invoke(_health);
@@ -56,20 +52,17 @@ public class GameManager : Singelton<GameManager>
         base.Awake();
         playerInput = new Player();
         cameraLook = Camera.main.GetComponent<MouseLook>();
-            
-        if (instance)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
     }
 
     void Start()
     {
+        if (cv == null)
+            Debug.Log("cv is null");
+        else
+            Debug.Log("cv is not null");
+        
+        health = continueCounter + 1;
+
         playerInput.Actions.Escape.performed += ctx => OnButtonPress(ctx);
         AddPlayerInput();
     }
@@ -138,5 +131,32 @@ public class GameManager : Singelton<GameManager>
     public void Respawn()
     {
         controller.transform.position = spawnPoint.position;
+    }
+
+    public void Playerdeath()
+    {
+        if (continueCounter > 0)
+        {
+            SceneManager.LoadScene("Continue");
+            Debug.Log(drowned.ToString());
+
+            cv.drownedText.gameObject.SetActive(false);
+            cv.killedText.gameObject.SetActive(false);
+            cv.finalLifeText.gameObject.SetActive(false);
+
+            if (continueCounter == 1)
+                cv.finalLifeText.gameObject.SetActive(true);
+            else 
+            { 
+                if (drowned)
+                    cv.drownedText.gameObject.SetActive(true);
+                else
+                    cv.killedText.gameObject.SetActive(true);
+            }
+            
+            cv.continueCounterText.text = "Remaining: " + continueCounter.ToString();
+        }
+        else
+            SceneManager.LoadScene("GameOver");
     }
 }

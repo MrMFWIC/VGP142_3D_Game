@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     Animator anim;
     WeaponPickup wp;
     CharacterController controller;
+    MouseLook ml;
     
     public Camera playerCamera;
     public float moveSpeed = 10;
@@ -34,6 +35,9 @@ public class PlayerController : MonoBehaviour
         {
             anim = GetComponentInChildren<Animator>();
             controller = GetComponent<CharacterController>();
+            wp = GetComponent<WeaponPickup>();
+            ml = GetComponent<MouseLook>();
+
             controller.minMoveDistance = 0.0f;
 
             if (!anim)
@@ -57,6 +61,8 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("Movespeed validation always runs");
         }
+
+        GameManager.Instance.health = GameManager.Instance.maxHealth;
     }
 
     // Update is called once per frame
@@ -70,9 +76,17 @@ public class PlayerController : MonoBehaviour
 
         if (controller.transform.position.y <= 9.0f)
         {
-            GameManager.instance.health--;
-            GameManager.instance.Respawn();
+            GameManager.Instance.drowned = true;
+            Debug.Log(GameManager.Instance.drowned.ToString());
+            GameManager.Instance.Playerdeath();
         }
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.playerInput.Actions.Move.performed -= MovePlayer;
+        GameManager.Instance.playerInput.Actions.Move.canceled -= MovePlayer;
+        GameManager.Instance.playerInput.Actions.Fire.performed -= Fire;
     }
 
     public void MovePlayer(InputAction.CallbackContext context)
@@ -121,11 +135,14 @@ public class PlayerController : MonoBehaviour
             }
 
             Destroy(hit.gameObject);
-        }
+        }   
+    }
 
-        if (hit.gameObject.CompareTag("Enemy"))
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag != "Enemy")
         {
-            GameManager.instance.health--;
+            GameManager.Instance.health--;
         }
     }
 }

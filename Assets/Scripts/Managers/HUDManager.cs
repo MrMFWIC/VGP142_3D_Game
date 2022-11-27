@@ -12,11 +12,11 @@ public class HUDManager : MonoBehaviour
     public GameObject HUD;
 
     [Header("Bars")]
-    public GameObject healthBar;
+    public Image healthBar;
 
     void Start()
     {
-        GameManager.instance.OnLifeValueChanged.AddListener((value) => UpdateHealthBarSprite(value));
+        GameManager.Instance.OnLifeValueChanged.AddListener((value) => UpdateHealthBarSprite(value));
     }
 
     void Update()
@@ -34,18 +34,18 @@ public class HUDManager : MonoBehaviour
     public void UpdateHealthBarSprite(int value)
     {
         if (value == 4)
-            healthBar.GetComponent<SpriteRenderer>().sprite.name = "HealthBar4";
+            healthBar.fillAmount = 1.0f;
 
         if (value == 3)
-            healthBar.GetComponent<SpriteRenderer>().sprite.name = "HealthBar3";
-        
+            healthBar.fillAmount = 0.715f;
+
         if (value == 2)
-            healthBar.GetComponent<SpriteRenderer>().sprite.name = "HealthBar2";
-        
+            healthBar.fillAmount = 0.5f;
+
         if (value == 1)
-            healthBar.GetComponent<SpriteRenderer>().sprite.name = "HealthBar1";
-        
+            healthBar.fillAmount = 0.29f;
+
         if (value == 0)
-            healthBar.GetComponent<SpriteRenderer>().sprite.name = "HealthBar0";
+            healthBar.fillAmount = 0.0f;
     }
 }

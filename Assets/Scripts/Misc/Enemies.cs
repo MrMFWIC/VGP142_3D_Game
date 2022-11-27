@@ -41,7 +41,7 @@ public class Enemies : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         agent = GetComponent<NavMeshAgent>();
 
-        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        /*playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         
         if (path.Length <= 0)
         {
@@ -59,12 +59,12 @@ public class Enemies : MonoBehaviour
         if (distThreshold <= 0)
         {
             distThreshold = 0.5f;
-        }
+        }*/
     }
 
     void Update()
     {
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(playerTransform.position - transform.position), rotationSpeed * Time.deltaTime);
+        /*transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(playerTransform.position - transform.position), rotationSpeed * Time.deltaTime);
         transform.position += transform.forward * moveSpeed * Time.deltaTime;
         
         if (currentState == EnemyState.Patrol)
@@ -88,14 +88,14 @@ public class Enemies : MonoBehaviour
         }
 
         if (target)
-            agent.SetDestination(target.transform.position);
+            agent.SetDestination(target.transform.position);*/
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Projectile")
         {
-            Destroy(gameObject);
+            //Destroy(gameObject);
         }
     }
 }
