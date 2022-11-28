@@ -25,6 +25,9 @@ public class PlayerController : MonoBehaviour
     public bool godModeActive = false;
     public float godModeTimer = 5.0f;
 
+    public Transform playerTransform;
+    public Transform checkpointSpawn;
+
     Vector3 curMoveInput;
     Vector3 destination;
     Vector2 move;
@@ -63,6 +66,11 @@ public class PlayerController : MonoBehaviour
         }
 
         GameManager.Instance.health = GameManager.Instance.maxHealth;
+
+        if (GameManager.Instance.checkpoint)
+        {
+            playerTransform.position = checkpointSpawn.position;
+        }
     }
 
     // Update is called once per frame
@@ -140,9 +148,13 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag != "Enemy")
-        {
+        if (collision.gameObject.tag == "Enemy")
             GameManager.Instance.health--;
+
+        if (collision.gameObject.tag == "Checkpoint")
+        {
+            GameManager.Instance.checkpoint = true;
+            Debug.Log("Checkpoint reached");
         }
     }
 }

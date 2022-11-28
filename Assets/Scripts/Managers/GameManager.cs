@@ -18,6 +18,7 @@ public class GameManager : Singelton<GameManager>
     public CanvasManager cv;
 
     public bool drowned = false;
+    public bool checkpoint = false;
     public int continueCounter = 3;
 
     private int _health = 4;

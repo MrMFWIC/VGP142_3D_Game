@@ -11,6 +11,7 @@ TagManager:
   - AttachPoint
   - Weapon
   - GunSpawn
+  - Checkpoint
   layers:
   - Default
   - TransparentFX

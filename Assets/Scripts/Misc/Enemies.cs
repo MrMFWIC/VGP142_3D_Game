@@ -22,10 +22,9 @@ public class Enemies : MonoBehaviour
         Patrol
     }
 
-    Rigidbody rb;
     NavMeshAgent agent;
-    
-    public GameObject target;
+    public CheckForPlayer sight;
+
     public EnemyState currentState;
     public GameObject[] path;
     public int pathIndex;
@@ -38,7 +37,6 @@ public class Enemies : MonoBehaviour
 
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
         agent = GetComponent<NavMeshAgent>();
 
         /*playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
@@ -89,6 +87,11 @@ public class Enemies : MonoBehaviour
 
         if (target)
             agent.SetDestination(target.transform.position);*/
+
+        if (sight.playerSeen)
+        {
+            agent.SetDestination(playerTransform.position);
+        }
     }
 
     private void OnCollisionEnter(Collision collision)

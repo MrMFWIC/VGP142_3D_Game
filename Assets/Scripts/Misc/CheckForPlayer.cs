@@ -5,12 +5,13 @@ using UnityEngine;
 public class CheckForPlayer : MonoBehaviour
 {
     public Transform playerTransform;
-
-    public float sightDistance = 100f;
     public Transform originPoint;
+    
+    public float sightDistance = 100f;
 
+    public bool playerSeen;
     public float rotationSpeed;
-    // Start is called before the first frame update
+    
     void Start()
     {
 
@@ -22,7 +23,10 @@ public class CheckForPlayer : MonoBehaviour
         if (!playerTransform)
             transform.Rotate(0, rotationSpeed * Time.deltaTime, 0);
         else
+        {
             transform.LookAt(playerTransform.position);
+            playerSeen = true;
+        }
 
         RaycastHit hit;
         if (Physics.Raycast(originPoint.position, Vector3.forward, out hit, sightDistance))
