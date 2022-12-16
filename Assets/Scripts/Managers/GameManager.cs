@@ -15,6 +15,7 @@ public class GameManager : Singelton<GameManager>
 
     public PlayerController controller;
     public Transform spawnPoint;
+    public Transform checkpointSpawnPoint;
     public CanvasManager cv;
 
     public bool drowned = false;
@@ -159,5 +160,13 @@ public class GameManager : Singelton<GameManager>
         }
         else
             SceneManager.LoadScene("GameOver");
+    }
+
+    void UpdateSpawnPoint()
+    {
+        if (checkpoint)
+        {
+            spawnPoint = checkpointSpawnPoint;
+        }
     }
 }

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Checkpoint : MonoBehaviour
 {
+    public GameObject PSGreen;
+    public GameObject PSYellow;
+
     void Start()
     {
         
@@ -13,17 +16,8 @@ public class Checkpoint : MonoBehaviour
     {
         if (GameManager.Instance.checkpoint)
         {
-            ParticleSystem.MainModule settings = GetComponent<ParticleSystem>().main;
-            settings.startColor = new ParticleSystem.MinMaxGradient(Color.green);
-        }
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "Player")
-        {
-            GameManager.Instance.checkpoint = true;
-            Debug.Log("Checkpoint reached");
+            PSGreen.SetActive(true);
+            PSYellow.SetActive(false);
         }
     }
 }

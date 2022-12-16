@@ -17,7 +17,6 @@ public class CheckForPlayer : MonoBehaviour
 
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (!playerTransform)

@@ -70,6 +70,7 @@ public class PlayerController : MonoBehaviour
         if (GameManager.Instance.checkpoint)
         {
             playerTransform.position = checkpointSpawn.position;
+            Debug.Log("Checkpoint spawn called");
         }
     }
 
@@ -144,14 +145,11 @@ public class PlayerController : MonoBehaviour
 
             Destroy(hit.gameObject);
         }   
-    }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "Enemy")
+        if (hit.gameObject.CompareTag("Enemy"))
             GameManager.Instance.health--;
 
-        if (collision.gameObject.tag == "Checkpoint")
+        if (hit.gameObject.CompareTag("Checkpoint"))
         {
             GameManager.Instance.checkpoint = true;
             Debug.Log("Checkpoint reached");
