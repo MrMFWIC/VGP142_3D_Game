@@ -20,10 +20,13 @@ public class PlayerController : MonoBehaviour
 
     public Rigidbody projectilePrefab;
     public Transform projectileSpawnPoint;
-    public float projectileForce = 10.0f;
+    public float projectileForce = 30.0f;
 
     public bool godModeActive = false;
-    public float godModeTimer = 5.0f;
+    public float godModeTimer = 8.0f;
+
+    public bool speedUpActive = false;
+    public float speedUpTimer = 8.0f;
 
     public Transform playerTransform;
     public Transform checkpointSpawn;
@@ -89,6 +92,15 @@ public class PlayerController : MonoBehaviour
             Debug.Log(GameManager.Instance.drowned.ToString());
             GameManager.Instance.Playerdeath();
         }
+
+        if (speedUpActive)
+        {
+            moveSpeed = 15;
+        }
+        else
+        {
+            moveSpeed = 10;
+        }
     }
 
     private void OnDisable()
@@ -133,6 +145,13 @@ public class PlayerController : MonoBehaviour
         godModeActive = false;
     }
 
+    IEnumerator StopSpeedUp()
+    {
+        yield return new WaitForSeconds(speedUpTimer);
+
+        speedUpActive = false;
+    }
+
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         if (hit.gameObject.CompareTag("GodMode"))
@@ -140,11 +159,43 @@ public class PlayerController : MonoBehaviour
             if (!godModeActive)
             {
                 godModeActive = true;
+                Debug.Log("God Mode Activated");
                 StartCoroutine(StopGodMode());
             }
 
             Destroy(hit.gameObject);
-        }   
+        }
+
+        if (hit.gameObject.CompareTag("SpeedUp"))
+        {
+            if (!speedUpActive)
+            {
+                speedUpActive = true;
+                Debug.Log("Speed Up Activated");
+                StartCoroutine(StopSpeedUp());
+            }
+
+            Destroy(hit.gameObject);
+        }
+
+        if (hit.gameObject.CompareTag("GateKey"))
+        {
+            GameManager.Instance.gateActive = true;
+            Debug.Log("Gate Activated");
+            Destroy(hit.gameObject);
+        }
+
+        if (hit.gameObject.CompareTag("Melee") && godModeActive == false)
+        {
+            GameManager.Instance.health--;
+            GameManager.Instance.Playerdeath();
+        }
+
+        if (hit.gameObject.CompareTag("Projectile"))
+        {
+            GameManager.Instance.health--;
+            GameManager.Instance.Playerdeath();
+        }
 
         if (hit.gameObject.CompareTag("Enemy"))
             GameManager.Instance.health--;

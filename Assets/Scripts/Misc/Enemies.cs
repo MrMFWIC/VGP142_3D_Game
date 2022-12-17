@@ -15,90 +15,109 @@ public class Enemies : MonoBehaviour
         GrWizard,
         BlWizard
     }
-    
-    public enum EnemyState
-    {
-        Chase, 
-        Patrol
-    }
 
     NavMeshAgent agent;
     public CheckForPlayer sight;
-
-    public EnemyState currentState;
-    public GameObject[] path;
-    public int pathIndex;
-    public float distThreshold;
 
     public EnemyTypes currentEnemyType;
     Transform playerTransform;
     public float rotationSpeed = 3f;
     public float moveSpeed = 3f;
 
+    public GameObject firePoint;
+    public Rigidbody projectilePrefab;
+    public float projectileForce = 30.0f;
+    private float fireCountdown = 0.0f;
+    private float fireRate = 2.0f;
+
+    public GameObject meleePoint;
+    public BoxCollider meleeATK;
+    private float attackCountdown = 0.0f;
+    private float attackRate = 1.0f;
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-
-        /*playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-        
-        if (path.Length <= 0)
-        {
-            path = GameObject.FindGameObjectsWithTag("PatrolNode");
-        }
-
-        if (currentState == EnemyState.Chase)
-        {
-            target = GameObject.FindGameObjectWithTag("Player");
-
-            if (target)
-                agent.SetDestination(target.transform.position);
-        }
-
-        if (distThreshold <= 0)
-        {
-            distThreshold = 0.5f;
-        }*/
+        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        /*firePoint = GameObject.FindGameObjectWithTag("FirePoint");
+        meleePoint = GameObject.FindGameObjectWithTag("MeleePoint");*/
     }
 
     void Update()
     {
-        /*transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(playerTransform.position - transform.position), rotationSpeed * Time.deltaTime);
-        transform.position += transform.forward * moveSpeed * Time.deltaTime;
-        
-        if (currentState == EnemyState.Patrol)
+        agent.SetDestination(playerTransform.position);
+
+        if (currentEnemyType == EnemyTypes.Floater || currentEnemyType == EnemyTypes.Slime || currentEnemyType == EnemyTypes.Spike)
         {
-            if (target)
-                Debug.DrawLine(transform.position, target.transform.position, Color.red);
-
-            if (agent.remainingDistance < distThreshold)
+            if (agent.remainingDistance <= 2.0f)
             {
-                pathIndex++;
-                pathIndex %= path.Length;
+                agent.isStopped = true;
+                Melee();
+            }
 
-              target = path[pathIndex];
+            if (agent.remainingDistance > 2.0f)
+            {
+                agent.isStopped = false;
             }
         }
 
-        if (currentState == EnemyState.Chase)
+        if (currentEnemyType == EnemyTypes.GrWizard || currentEnemyType == EnemyTypes.BlWizard)
         {
-            if (target.CompareTag("PatrolNode"))
-                target = GameObject.FindGameObjectWithTag("Player");
+            if (agent.remainingDistance <= 20.0f)
+            {
+                agent.isStopped = true;
+                Fire();
+            }
+
+            if (agent.remainingDistance > 20.0f)
+            {
+                agent.isStopped = false;
+            }
         }
 
-        if (target)
-            agent.SetDestination(target.transform.position);*/
-
-        if (sight.playerSeen)
+        if (currentEnemyType == EnemyTypes.Chest)
         {
-            agent.SetDestination(playerTransform.position);
+            agent.isStopped = true;
+            
+            if (agent.remainingDistance <= 15.0f)
+            {
+                Fire();
+            }
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    void Melee()
     {
-        if (collision.gameObject.tag == "Projectile")
+        if (meleeATK && meleePoint)
         {
-            //Destroy(gameObject);
+            //if (attackCountdown <= 0.0f)
+            //{
+                BoxCollider temp = Instantiate(meleeATK, meleePoint.transform.position, meleePoint.transform.rotation);
+
+                attackCountdown = 1.0f / fireRate;
+
+                Destroy(temp.gameObject, 0.5f);
+           // }
+
+            //fireCountdown -= Time.deltaTime;
+        }
+    }
+
+    void Fire()
+    {
+        if (projectilePrefab && firePoint)
+        {
+            if (fireCountdown <= 0.0f)
+            {
+                Rigidbody temp = Instantiate(projectilePrefab, firePoint.transform.position, firePoint.transform.rotation);
+                temp.AddForce(firePoint.transform.forward * projectileForce, ForceMode.Impulse);
+
+                fireCountdown = 1.0f / fireRate;
+
+                Destroy(temp.gameObject, 2.0f);
+            }
+
+            fireCountdown -= Time.deltaTime;
         }
     }
 }

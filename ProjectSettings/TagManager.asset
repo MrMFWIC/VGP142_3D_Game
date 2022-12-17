@@ -12,6 +12,11 @@ TagManager:
   - Weapon
   - GunSpawn
   - Checkpoint
+  - FirePoint
+  - MeleePoint
+  - Melee
+  - SpeedUp
+  - GateKey
   layers:
   - Default
   - TransparentFX

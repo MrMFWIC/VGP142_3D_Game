@@ -338,6 +338,7 @@ MonoBehaviour:
   backButton: {fileID: 0}
   resumeGame: {fileID: 0}
   returnToMenu: {fileID: 848186874}
+  continueButton: {fileID: 0}
   mainMenu: {fileID: 0}
   settingsMenu: {fileID: 0}
   pauseMenu: {fileID: 0}
@@ -347,6 +348,10 @@ MonoBehaviour:
   masterVolSliderText: {fileID: 0}
   musicVolSliderText: {fileID: 0}
   SFXVolSliderText: {fileID: 0}
+  drownedText: {fileID: 0}
+  killedText: {fileID: 0}
+  finalLifeText: {fileID: 0}
+  continueCounterText: {fileID: 0}
 --- !u!114 &469449101
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -454,8 +459,8 @@ AudioSource:
   m_GameObject: {fileID: 469449099}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 1155151990175190320, guid: febb160ae38196641ba4e8cc408727a9, type: 2}
+  m_audioClip: {fileID: 8300000, guid: 200530ea7327094499a6a811985003bc, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1

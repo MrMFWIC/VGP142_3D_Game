@@ -22,6 +22,8 @@ public class GameManager : Singelton<GameManager>
     public bool checkpoint = false;
     public int continueCounter = 3;
 
+    public bool gateActive = false;
+
     private int _health = 4;
     public int maxHealth = 4;
 

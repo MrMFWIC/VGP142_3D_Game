@@ -6,7 +6,7 @@ public class VictoryPoint : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.tag == "Player" && GameManager.Instance.gateActive == true)
             GameManager.Instance.Victory();
     }
 }
